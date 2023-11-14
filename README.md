@@ -1,1 +1,1 @@
-# eduplan
+# eduplan repo
