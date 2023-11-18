@@ -1,0 +1,27 @@
+name: Sanity check
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: python:3.12
+        ports:
+          - 5000:5000
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+
+    - name: Run script in Docker container
+      run: docker exec mycontainer python scripts/test.py
+
+    - name: Run flake8 Lint
+      run: docker exec mycontainer flake8 --ignore=E,W

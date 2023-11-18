@@ -5,10 +5,21 @@ activate-venv:
 	@echo "Activating virtual environment..."
 	@. $(VENV_DIR)/bin/activate && pip --version
 
-pip-compile: activate-venv
-	@echo "Compiling requirements..."
-	@pip-compile -v --no-emit-index-url --output-file=$(REQUIREMENTS_FILE) requirements.in
+pip-compile:
+	docker-compose run app bash -c \
+	"pip-compile -v --no-emit-index-url \
+	--output-file=requirements.txt requirements.in"
 
-build: activate-venv pip-compile
-	@echo "Installing requirements into virtual environment..."
-	@${VENV_DIR}/bin/python -m pip install -r requirements.txt
+dev-pip-compile:
+	docker-compose run app bash -c \
+	"pip-compile -v --no-emit-index-url \
+	--output-file=requirements-dev.txt requirements.in requirements-dev.in"
+
+build:
+	docker-compose build
+
+up:
+	docker-compose up
+
+test:
+	docker-compose up --build test

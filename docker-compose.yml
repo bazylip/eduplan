@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      target: app
+      context: .
+    volumes:
+      - ./:/project
+    command:
+      sh -c "streamlit main.py"
+
+  test:
+    build:
+      target: dev-app
+      context: .
+    volumes:
+      - ./:/project
+    command:
+      sh -c ". scripts/run-tests.sh"
