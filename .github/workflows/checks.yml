@@ -9,8 +9,6 @@ jobs:
     services:
       docker:
         image: python:3.12
-        ports:
-          - 5000:5000
 
     steps:
     - uses: actions/checkout@v2
@@ -20,8 +18,6 @@ jobs:
       with:
         python-version: 3.12
 
-    - name: Run script in Docker container
-      run: docker exec mycontainer python scripts/test.py
+    - name: Run tests
+      run: docker-compose up --build test
 
-    - name: Run flake8 Lint
-      run: docker exec mycontainer flake8 --ignore=E,W
