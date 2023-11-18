@@ -19,7 +19,10 @@ build:
 	docker-compose build
 
 up:
-	docker-compose up
+	docker-compose up app
 
 test:
 	docker-compose up --build test
+
+run:
+	docker-compose run app sh

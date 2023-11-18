@@ -5,10 +5,12 @@ services:
     build:
       target: app
       context: .
+    ports:
+      - "8501:8501"
     volumes:
       - ./:/project
     command:
-      sh -c "streamlit main.py"
+      sh -c "streamlit run eduplan/main.py"
 
   test:
     build:
