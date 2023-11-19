@@ -16,7 +16,10 @@ def load_data():
     ]
     for col in cols_to_convert:
         data[col] = data[col].str.replace(",", ".").astype(float)
-    subvention_columns = [f"P{i}" for i in range(1, 73)]
+
+    subvention_columns = [f"P{i}" for i in range(1, 73)] + [
+        f"P{i}_subwencja_total" for i in range(1, 73)
+    ]
     for col in subvention_columns:
         data[col] = data[col].astype(str).str.replace(",", ".").astype(float)
     return data
