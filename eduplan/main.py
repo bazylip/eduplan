@@ -1,6 +1,5 @@
 import streamlit as st
-
-from eduplan.data_loader import load_data
+from data_loader import load_data
 
 # Set page config
 # st.set_page_config(layout="wide", page_title="EDUplan")

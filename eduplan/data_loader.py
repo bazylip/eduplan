@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
-
-from eduplan.config import EduplanConfig
+from config import EduplanConfig
 
 
 @st.cache_data
