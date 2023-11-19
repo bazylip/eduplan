@@ -22,8 +22,8 @@ with data_tab:
 
 with subvention_tab:
     for subvention_columns, title in [
-        ([f"P{i}" for i in range(1, 73)], "Subwencja - liczba uczniów"),
-        ([f"P{i}_subwencja_total" for i in range(1, 73)], "Subwencja - kwoty"),
+        ([f"P{i}" for i in range(1, 73)], "Liczba uczniów"),
+        ([f"P{i}_subwencja_total" for i in range(1, 73)], "Kwoty"),
     ]:
         st.header(title)
 
