@@ -2,46 +2,84 @@ import streamlit as st
 
 from eduplan.data_loader import load_data
 
+# Set page config
+# st.set_page_config(layout="wide", page_title="EDUplan")
+
+# Load data
 data = load_data()
 
-# Sidebar - School selection
-school_list = data["Nazwa szkoły / placówki"].unique()
-selected_school = st.sidebar.selectbox("Wybierz Szkołę", school_list)
+# Sidebar for filtering
+# Sidebar for filtering
+st.sidebar.header("Search & Filter")
+# Text input for search
+search_query = st.sidebar.text_input("Search by School Name")
+# Filter the school list based on the search query
+filtered_school_list = [
+    school
+    for school in data["Nazwa szkoły / placówki"].unique()
+    if search_query.lower() in school.lower()
+]
+# SelectBox for filtered results
+selected_school = st.sidebar.selectbox("Select a School", filtered_school_list)
+# Main layout
+st.title(selected_school)
 
-# Filter data
-school_data = data[data["Nazwa szkoły / placówki"] == selected_school]
-
-# Display data table
-st.write("Dane dla szkoły", selected_school)
-st.dataframe(school_data)
-
-# Extracting subvention and supplement data for the pie chart
-subvention_total = school_data["subwencja_total"].values[0]
-supplement_total = school_data["dopłata_total"].values[0]
-subvention_per_student = school_data["subwencja_per_uczeń"].values[0]
-supplement_per_student = school_data["dopłata_per_uczeń"].values[0]
-supplement_per_stanin = school_data["dopłata_per_stanin"].values[0]
-
-# Pie chart
-subvention_columns = [f"P{i}" for i in range(1, 73)]
-# subvention_values = school_data[subvention_columns].values.flatten().tolist()
-
-# Bar chart
-subvention_values = school_data[subvention_columns].astype(float)
-
-# Generate the bar chart using Streamlit's built-in function
-bar_chart_data = school_data[subvention_columns].transpose().reset_index()
-bar_chart_data.columns = ["Subvention Type", "Amount"]  # Rename columns for clarity
-
-# Filter out rows where the Amount is not zero
-bar_chart_data = bar_chart_data[bar_chart_data["Amount"] != 0]
-
-# Plot the bar chart with non-zero values
-st.bar_chart(bar_chart_data.set_index("Subvention Type"))
+# Use tabs for organization
+subvention_tab, details_tab, data_tab = st.tabs(["Subwencje", "Szczegóły", "Dane"])
 
 
-# Displaying additional details
-st.write(f"Subwencja per Uczeń: {subvention_per_student}")
-st.write(f"Dopłata Total: {supplement_total}")
-st.write(f"Dopłata per Uczeń: {supplement_per_student}")
-st.write(f"Dopłata per Stanin: {supplement_per_stanin}")
+with data_tab:
+    # Overview information
+    st.header(f"Dane dla szkoły: {selected_school}")
+    school_data = data[data["Nazwa szkoły / placówki"] == selected_school]
+    st.table(school_data.transpose())
+
+
+with subvention_tab:
+    # Financial details
+    st.header("Struktura subwencji")
+    subvention_columns = [f"P{i}" for i in range(1, 73)]
+
+    # Assuming 'subvention_columns' is a list of column names for subvention values
+    subvention_values = school_data[subvention_columns].astype(float)
+
+    # Filter out rows where the amount is not zero and set index
+    non_zero_subventions = school_data[subvention_columns].transpose()
+    non_zero_subventions.columns = ["Kwota"]
+    non_zero_subventions = non_zero_subventions[non_zero_subventions["Kwota"] != 0]
+
+    # Display bar chart
+    st.bar_chart(non_zero_subventions)
+
+with details_tab:
+    # Additional details and metrics
+    subvention_per_student = school_data["subwencja_per_uczeń"].values[0]
+    supplement_total = school_data["dopłata_total"].values[0]
+    supplement_per_student = school_data["dopłata_per_uczeń"].values[0]
+    supplement_per_stanin = school_data["dopłata_per_stanin"].values[0]
+
+    # Streamlit app
+    st.header("Szczegóły")
+
+    # Custom formatting using Markdown
+    st.markdown(
+        f"""
+    | Opis            | Wartość |
+    |------------------------|-------|
+    | Subwencja per uczeń    | {subvention_per_student} |
+    | Łączna subwencja       | {supplement_total} |
+    | Dopłata per uczeń      | {supplement_per_student} |
+    | Dopłata per stanin     | {supplement_per_stanin} |
+    """
+    )
+
+# Footer or additional information
+# st.sidebar.markdown("### Additional Resources")
+# st.sidebar.write("Include links to resources, guides, or contact info here.")
+
+# Feedback loop (could be a form or just a button with a mailto link)
+# st.sidebar.markdown("### Feedback")
+# st.sidebar.write("Click below to provide feedback on the dashboard.")
+# st.sidebar.button("Provide Feedback")
+
+# Ensure caching is used for data loading and processing to improve performance
