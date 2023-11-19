@@ -18,6 +18,8 @@ dev-pip-compile:
 build:
 	docker-compose build
 
+build-all: pip-compile dev-pip-compile build
+
 up:
 	docker-compose up app
 

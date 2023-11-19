@@ -6,6 +6,8 @@
 #
 altair==5.1.2
     # via streamlit
+annotated-types==0.6.0
+    # via pydantic
 attrs==23.1.0
     # via
     #   jsonschema
@@ -88,6 +90,14 @@ pyarrow==14.0.1
     # via streamlit
 pycodestyle==2.7.0
     # via flake8
+pydantic==2.5.1
+    # via
+    #   -r requirements.in
+    #   pydantic-settings
+pydantic-core==2.14.3
+    # via pydantic
+pydantic-settings==2.1.0
+    # via -r requirements.in
 pydeck==0.8.1b0
     # via streamlit
 pyflakes==2.3.1
@@ -100,8 +110,12 @@ python-dateutil==2.8.2
     # via
     #   pandas
     #   streamlit
+python-dotenv==1.0.0
+    # via pydantic-settings
 pytz==2023.3.post1
     # via pandas
+pyyaml==6.0.1
+    # via -r requirements.in
 referencing==0.31.0
     # via
     #   jsonschema
@@ -129,7 +143,10 @@ toolz==0.12.0
 tornado==6.3.3
     # via streamlit
 typing-extensions==4.8.0
-    # via streamlit
+    # via
+    #   pydantic
+    #   pydantic-core
+    #   streamlit
 tzdata==2023.3
     # via pandas
 tzlocal==5.2

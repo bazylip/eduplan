@@ -11,6 +11,8 @@ services:
       - ./:/project
     command:
       sh -c "streamlit run eduplan/main.py"
+    env_file:
+      - .env
 
   test:
     build:
@@ -20,3 +22,5 @@ services:
       - ./:/project
     command:
       sh -c ". scripts/run-tests.sh"
+    env_file:
+      - .env
